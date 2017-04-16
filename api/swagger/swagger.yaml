@@ -1,11 +1,19 @@
 swagger: "2.0"
 info:
-  version: "0.0.1"
-  title: Hello World App
+  version: "0.1.1"
+  title: Hello Aqua APIs
+  description: APIs for aqua world; ligth, cam, temperature, feeding control
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
 basePath: /
+securityDefinitions:
+  api_key:
+    type: apiKey
+    in: query
+    name: api_key
+security:
+  - api_key: [  ] 
 # 
 schemes:
   # tip: remove http to make production-grade

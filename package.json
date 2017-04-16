@@ -2,9 +2,9 @@
   "name": "hello-aqua",
   "version": "0.0.1",
   "private": true,
-  "description": "New Swagger API Project",
+  "description": "Aqua Swagger API Project",
   "keywords": [],
-  "author": "",
+  "author": "okgosu",
   "license": "",
   "main": "app.js",
   "dependencies": {

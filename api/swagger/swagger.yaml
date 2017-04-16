@@ -1,10 +1,10 @@
 swagger: "2.0"
 info:
-  version: "0.1.1"
+  version: "0.2.1"
   title: Hello Aqua APIs
   description: APIs for aqua world; ligth, cam, temperature, feeding control
 # during dev, should point to your local machine
-host: localhost:10010
+host: localhost:8081
 # basePath prefixes all resource paths 
 basePath: /
 securityDefinitions:
@@ -41,6 +41,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    put:
+      description: 'Turn on or off aqua light'
+      operationId: aqua_light_post
+      parameters:
+        - name: operation
+          in: body
+          description: on / off
+          required: true 
+          schema:
+            $ref: "#/definitions/AquaLightOperation"
+      responses:
+        "200":
+          description: "success / fail"
+          schema:
+            $ref: "#/definitions/AquaOperationResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"   
   /aqua/light/{id}:
     x-swagger-router-controller: aqua_control
     get:
@@ -60,30 +79,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"  
-    put:
-      description: 'Turn on or off aqua light'
-      operationId: aqua_light_put
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-        - name: operation
-          in: body
-          description: on / off
-          required: true 
-          schema:
-            $ref: "#/definitions/AquaLightOperation"
-      responses:
-        "200":
-          description: "success / fail"
-          schema:
-            $ref: "#/definitions/AquaOperationResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"   
-            
   /aqua/cam:
     x-swagger-router-controller: aqua_control
     get:
@@ -98,16 +93,10 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /aqua/cam/{id}:
-    x-swagger-router-controller: aqua_control
     put:
       description: 'Turn on or off aqua cam'
-      operationId: aqua_cam_put
+      operationId: aqua_cam_post
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
         - name: operation
           in: body
           description: on / off
@@ -123,17 +112,17 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"             
-  /hello:
+  /aqua/info:
     # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+    x-swagger-router-controller: aqua_control
     get:
-      description: Returns 'Hello' to the caller
+      description: Returns 'Aqua world information' to the caller
       # used as the method name of the controller
-      operationId: hello
+      operationId: aqua_info
       parameters:
         - name: name
           in: query
-          description: The name of the person to whom to say hello
+          description: your name
           required: false
           type: string
       responses:
@@ -180,18 +169,28 @@ definitions:
   AquaLightOperation:
     type: object
     properties:
+      id:
+        type: string
+        description: device number       
       operation:
         type: string
         description: on / off
   AquaCamOperation:
     type: object
     properties:
+      id:
+        type: string
+        description: device number        
       operation:
         type: string
         description: on / off
   AquaOperationResponse: 
     type: object
     properties:
+      deviceId:
+        type: string
+      deviceStatus:
+        type: string
       operationresult:
         type: string
   AquaOnOffResponse: 

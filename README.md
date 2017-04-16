@@ -8,5 +8,5 @@ These are skeleton APIs for fishing ports control. For example, light on/off, ca
 - step 2: # cd hello-aqua 
 - step 3: # swagger project start hello-aqua 
 
-## Let me try 
+## Let's try 
 - Check out : http://127.0.0.1:10010/docs/#/default

@@ -6,7 +6,7 @@ These are skeleton APIs for fishing ports control. For example, light on/off, ca
 ## How to use
 - step 1: # git clone https://github.com/okgosu/hello-aqua.git
 - step 2: # cd hello-aqua 
-- step 3: # npm install -g swagger
+- step 3: # npm install  
 - step 4: # swagger project start hello-aqua 
 
 ## Let's try 

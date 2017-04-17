@@ -11,3 +11,5 @@ These are skeleton APIs for fishing ports control. For example, light on/off, ca
 
 ## Let's try 
 - Check out : http://localhost:8081/docs/#/default
+
+![image](https://cloud.githubusercontent.com/assets/6773678/25075414/09bdf4d4-234f-11e7-8758-795badd827d3.png)

@@ -50,14 +50,16 @@ var mockAquaLightList = {
 function getAquaLight(req, res) {
   var id = req.swagger.params.id.value;
   console.log('====getAquaLight====' + id);
-  res.json(
-    {
-      "id" : id,
-      "status" : "off",
-      "description" : id + "번등"
-    }
-  );
+  res.json(rasp.getAquaLightModule(id));
+  //  res.json(mockAquaLightResult);
 }
+
+var mockAquaLightResult = {
+    "id":"0",
+    "status":"on",
+    "description" : "0번등"
+}
+
 function setAquaLight(req, res) {
   var deviceId = req.body.id;
   var deviceOperation = req.body.operation;

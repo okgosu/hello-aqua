@@ -33,8 +33,10 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
   var port = process.env.PORT || 10010;
   app.listen(8081);
-
+  console.log('http://192.168.0.21:8081/docs');
   if (swaggerExpress.runner.swagger.paths['/hello']) {
     console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
   }
 });
+  console.log('http://192.168.0.21:8081/docs');
+

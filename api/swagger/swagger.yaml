@@ -1,20 +1,18 @@
 swagger: "2.0"
 info:
-  version: "0.2.1"
+  version: "0.3.0"
   title: Hello Aqua APIs
   description: APIs for aqua world; ligth, cam, temperature, feeding control
 # during dev, should point to your local machine
-host: localhost:8081
-# basePath prefixes all resource paths 
+host: 192.168.0.21:8081
+# basePath prefixes all resource paths
 basePath: /
 securityDefinitions:
   api_key:
     type: apiKey
     in: query
     name: api_key
-security:
-  - api_key: [  ] 
-# 
+#
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -30,7 +28,7 @@ paths:
   /aqua/light/:
     x-swagger-router-controller: aqua_control
     get:
-      description: Returns 'aqua light list' 
+      description: Returns 'aqua light list'
       operationId: aqua_light_list
       responses:
         "200":
@@ -42,13 +40,15 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
     put:
+      security:
+        - api_key: [  ]
       description: 'Turn on or off aqua light'
       operationId: aqua_light_post
       parameters:
         - name: operation
           in: body
           description: on / off
-          required: true 
+          required: true
           schema:
             $ref: "#/definitions/AquaLightOperation"
       responses:
@@ -59,11 +59,11 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"   
+            $ref: "#/definitions/ErrorResponse"
   /aqua/light/{id}:
     x-swagger-router-controller: aqua_control
     get:
-      description: Returns 'aqua light status' 
+      description: Returns 'aqua light status'
       operationId: aqua_light_get
       parameters:
         - name: id
@@ -78,11 +78,11 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"  
+            $ref: "#/definitions/ErrorResponse"
   /aqua/cam:
     x-swagger-router-controller: aqua_control
     get:
-      description: Returns 'aqua cam on/off status' 
+      description: Returns 'aqua cam on/off status'
       operationId: aqua_cam
       responses:
         "200":
@@ -96,11 +96,13 @@ paths:
     put:
       description: 'Turn on or off aqua cam'
       operationId: aqua_cam_post
+      security:
+      - api_key: [  ]
       parameters:
         - name: operation
           in: body
           description: on / off
-          required: true 
+          required: true
           schema:
             $ref: "#/definitions/AquaCamOperation"
       responses:
@@ -111,7 +113,39 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"             
+            $ref: "#/definitions/ErrorResponse"
+  /aqua/cam/image:
+    x-swagger-router-controller: aqua_control
+    get:
+      description: Returns 'aqua cam still image'
+      produces:  
+         - image/jpeg
+         - application/json
+         - application/x-yaml
+      operationId: aqua_cam_image
+      responses:
+        "200":
+          description: "still image"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /aqua/cam/stream:
+    x-swagger-router-controller: aqua_control
+    get:
+      description: Returns 'aqua cam stream'
+      operationId: aqua_cam_stream
+      produces:
+        - application/octet-stream
+      responses:
+        "200":
+          description: "still image"
+          schema:
+            $ref: "#/definitions/AquaCamBinaryResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /aqua/info:
     # binds a127 app logic to a route
     x-swagger-router-controller: aqua_control
@@ -141,12 +175,12 @@ paths:
 
 definitions:
   AquaLightList:
-    required: 
+    required:
       - aqualights
     properties:
       aqualights:
         type: array
-        items: 
+        items:
           type: object
           properties:
             id:
@@ -171,7 +205,7 @@ definitions:
     properties:
       id:
         type: string
-        description: device number       
+        description: device number
       operation:
         type: string
         description: on / off
@@ -180,11 +214,11 @@ definitions:
     properties:
       id:
         type: string
-        description: device number        
+        description: device number
       operation:
         type: string
         description: on / off
-  AquaOperationResponse: 
+  AquaOperationResponse:
     type: object
     properties:
       deviceId:
@@ -193,14 +227,16 @@ definitions:
         type: string
       operationresult:
         type: string
-  AquaOnOffResponse: 
-    required: 
+  AquaOnOffResponse:
+    required:
       - onoffstatus
     properties:
       onoffstatus:
         type: string
+  AquaCamBinaryResponse:
+    type: object
   HelloWorldResponse:
-    required: 
+    required:
       - message
     properties:
       message:

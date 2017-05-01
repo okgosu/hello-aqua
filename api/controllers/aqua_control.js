@@ -10,7 +10,9 @@ module.exports = {
   aqua_light_get: getAquaLight,
   aqua_light_post: setAquaLight,
   aqua_cam: cam,
-  aqua_cam_post: setAquaCam
+  aqua_cam_post: setAquaCam,
+  aqua_cam_image: getCamImage,
+  aqua_cam_stream: getCamStream
 };
 /*
   Simple test api. This returns Aqua API information.
@@ -84,4 +86,14 @@ function cam(req, res) {
   res.json({
        "onoffstatus" : "cam off"
   });
+}
+
+function getCamImage(req, res) {
+  console.log('=====getCamImage===');
+  res.json(rasp.getCamImageStreamModule('snapshot'));
+}
+
+function getCamStream(req, res) {
+  console.log('=======getCamStream=====');
+  res.json(rasp.getCamImageStreamModule('stream'));
 }

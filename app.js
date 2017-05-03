@@ -1,5 +1,4 @@
 'use strict';
-
 var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
 module.exports = app; // for testing
@@ -24,7 +23,7 @@ var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) { throw err; }
-
+  swaggerExpress.runner.swagger.host = 'okgosu.synology.me:8081'
   // add swagger-ui (/docs)
   app.use(SwaggerUi(swaggerExpress.runner.swagger));
 
@@ -33,10 +32,9 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
   var port = process.env.PORT || 10010;
   app.listen(8081);
-  console.log('http://192.168.0.21:8081/docs');
   if (swaggerExpress.runner.swagger.paths['/hello']) {
     console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
   }
 });
-  console.log('http://192.168.0.21:8081/docs');
+  console.log('http://okgosu.synology.me:8081/docs');
 

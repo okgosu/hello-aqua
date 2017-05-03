@@ -4,7 +4,8 @@ info:
   title: Hello Aqua APIs
   description: APIs for aqua world; ligth, cam, temperature, feeding control
 # during dev, should point to your local machine
-host: 192.168.0.21:8081
+host: okgosu.synology.me
+port: 8081
 # basePath prefixes all resource paths
 basePath: /
 securityDefinitions:

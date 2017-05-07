@@ -4,6 +4,11 @@ var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
 module.exports = app; // for testing
 
+
+var express = require('express');
+var path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
+
 var config = {
   appRoot: __dirname, // required config
 

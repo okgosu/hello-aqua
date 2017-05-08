@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: "0.3.0"
+  version: "0.4.0"
   title: Hello Aqua APIs
   description: APIs for aqua world; ligth, cam, temperature, feeding control
 # during dev, should point to your local machine
@@ -146,25 +146,16 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /aqua/info:
-    # binds a127 app logic to a route
+  /aqua/temperature:
     x-swagger-router-controller: aqua_control
     get:
-      description: Returns 'Aqua world information' to the caller
-      # used as the method name of the controller
-      operationId: aqua_info
-      parameters:
-        - name: name
-          in: query
-          description: your name
-          required: false
-          type: string
+      description: Returns 'this aqua temperature'
+      operationId: aqua_temp
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/TemperatureResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -235,11 +226,11 @@ definitions:
         type: string
   AquaCamBinaryResponse:
     type: object
-  HelloWorldResponse:
+  TemperatureResponse:
     required:
-      - message
+      - termperatue
     properties:
-      message:
+      termperatue:
         type: string
   ErrorResponse:
     required:

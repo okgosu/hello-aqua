@@ -5,7 +5,7 @@ var rasp_module = require('./rasberry_control.js');
 var rasp = rasp_module();
 
 module.exports = {
-  aqua_info: getAquaInfo,
+  aqua_temp: getAquaTemperature,
   aqua_light_list: getAquaLightList,
   aqua_light_get: getAquaLight,
   aqua_light_post: setAquaLight,
@@ -15,13 +15,10 @@ module.exports = {
   aqua_cam_stream: getCamStream
 };
 /*
-  Simple test api. This returns Aqua API information.
-  Param 1: a handle to the request object
-  Param 2: a handle to the response object
+ This returns Aqua temperature.
 */
-function getAquaInfo(req, res) {
-  var name = req.swagger.params.name.value;
-  var msg = 'Hi, '+ name + ':) This is okgosu\'s Aqua APIs'
+function getAquaTemperature(req, res) {
+  var msg = '36.5'
   res.json(msg);
 }
 /*

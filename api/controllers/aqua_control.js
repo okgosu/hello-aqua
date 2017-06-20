@@ -7,7 +7,7 @@ var rasp = rasp_module();
 var request = require('request');
 
 module.exports = {
-  aqua_info: getAquaInfo,
+  aqua_temp: getAquaTemperature,
   aqua_light_list: getAquaLightList,
   aqua_light_get: getAquaLight,
   aqua_light_post: setAquaLight,
@@ -16,15 +16,30 @@ module.exports = {
   aqua_cam_image: getCamImage,
   aqua_cam_stream: getCamStream
 };
+var fromTemp = 26;
+var toTemp = 27;
+var testTime = setInterval(function(){
+    rasp.getAquaTemperatureModule(function(value) {
+      console.log('Temp:'+value);
+      if(value > toTemp) {
+        console.log('Cool down');
+        rasp.setAquaLightModule(1, 'on');
+      } else if (value < fromTemp) {
+        console.log('Fan stop');
+        rasp.setAquaLightModule(1, 'off');
+      }
+    });
+   },
+600000);
 /*
-  Simple test api. This returns Aqua API information.
-  Param 1: a handle to the request object
-  Param 2: a handle to the response object
+  This returns Aqua temperature.
 */
-function getAquaInfo(req, res) {
-  var name = req.swagger.params.name.value;
-  var msg = 'Hi, '+ name + ':) This is okgosu\'s Aqua APIs'
-  res.json(msg);
+function getAquaTemperature(req, res) {
+  var msg = '36.5';
+  //res.json(rasp.getAquaTemperatureModule());
+  rasp.getAquaTemperatureModule(function(value) {
+     res.json(value);
+  });
 }
 /*
   This returns light device list with on/off status.

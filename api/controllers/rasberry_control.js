@@ -1,12 +1,23 @@
 var Gpio = require('onoff').Gpio;
 var gpioArr = new Array();
-gpioArr[0] = new Gpio(18, 'out'); // power
-gpioArr[1] = new Gpio(21, 'out'); // LED 
+gpioArr[0] = new Gpio(13, 'out'); // LED power
+gpioArr[1] = new Gpio(6, 'out'); // Cooler power
+gpioArr[2] = new Gpio(5, 'out'); // CO2 power
+gpioArr[3] = new Gpio(18, 'out'); // Feeder power
+
 var request = require('request');
 var exec = require('child_process').exec;
+var rtemp = require('rpi-temp-module');
 
 module.exports = function (name) {
   return {
+    getAquaTemperatureModule: function(callback) {
+       console.log('getAquaTemperatureModule');
+       rtemp.getTemperature('28-0316013f2aff', function(value) {
+          console.log('rtemp~~~~:' + value); 
+          callback(value);
+       });
+    },
     getAquaLightModule: function(lightId) {
       console.log('====getAquaLightModule====' + lightId);
       var led_state = gpioArr[lightId].readSync() == 0 ? "off" : "on"; 
@@ -22,17 +33,29 @@ module.exports = function (name) {
       var led_state = new Array();
       led_state[0] = (gpioArr[0].readSync() == 0) ? 'off' : 'on';
       led_state[1] = (gpioArr[1].readSync() == 0) ? 'off' : 'on';
+      led_state[2] = (gpioArr[2].readSync() == 0) ? 'off' : 'on';
+      led_state[3] = (gpioArr[3].readSync() == 0) ? 'off' : 'on';
       var aquaLightList = {
            "aqualights": [
              {
                "id" : "0",
                "status" : led_state[0],
-               "description" : "~~~~~~0번등~~~~~~~~~~"
+               "description" : "~~~~~~slot 1~~~~~~~~~~"
              },
              {
                "id" : "1",
                "status" : led_state[1],
-               "description" : "~~~~~~~1번등~~~~~~~~"
+               "description" : "~~~~~~~slot 2~~~~~~~~"
+             },
+             {
+               "id" : "2",
+               "status" : led_state[2],
+               "description" : "~~~ slot 3 ~~~~"
+             },
+             {
+                "id":"3",
+                "status" : led_state[3],
+                "description" : "~~~~ slot 4 ~~~"
              }
              ]
       };
@@ -46,6 +69,10 @@ module.exports = function (name) {
       } else {
         cmd = './mjpgstop.sh';
       }
+
+
+
+
       exec(cmd, function (error, stdout, stderr) {
          console.log(stdout);
       });

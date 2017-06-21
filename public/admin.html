@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OkGos's Aqua World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript">
+      var arr_led_status = [0, 0, 0, 0];
+      $(document).ready(function(){
+          $.ajax({
+              type : "GET",
+              url : "http://okgosu.synology.me/aqua/light?api_key=1234",
+              dataType : "JSON",
+              error : function(){
+                  alert('API 휴식 중 1 - device 상태');
+              },
+              success : function(data){
+                 arr_led_status[0] = data.aqualights[0].status;
+                 arr_led_status[1] = data.aqualights[1].status;
+                 console.log(arr_led_status[0]);
+                 $("#light-switch").val(arr_led_status[0]);
+                 $('#light-switch').slider("refresh");
+                 $("#cooler-switch").val(arr_led_status[1]);
+                 $('#cooler-switch').slider("refresh");
+              }
+          });
+          $.ajax({
+             type : "GET",
+             url : "http://okgosu.synology.me/aqua/temperature?api_key=1234",
+             dataType : "JSON",
+             error : function(){
+                alert('API 휴식 중 2-온도체크');
+             },
+             success : function(data){
+               $("#dataArea").html('현재 온도 :<font color=\'red\'>' + data + '</font>도');
+             }
+         });
+      });
+      
+      function switch_cam() {
+        var op = $("#cam-switch").val();
+        var operation_data = {"id": "0", "operation": op};
+        $.ajax({
+            type: "PUT",
+            url : "http://okgosu.synology.me/aqua/cam/?api_key=1234",
+            data : JSON.stringify(operation_data),
+            contentType : "application/json",
+            dataType : "JSON",
+            error : function(){
+                alert('API 휴식 중 3-cam switch control');
+            },
+            success : function(data){
+               console.log(data);
+            }
+        });
+      }
+
+      function switch_ctrl(device) {
+        var op = '';
+        var device_id = '0';
+        if(device == 'light') {
+           op = $("#light-switch").val();
+           device_id = '0';
+        } else if (device == 'cooler') {
+           op = $("#cooler-switch").val();
+           device_id = '1';
+        }
+        var operation_data = {"id": device_id, "operation": op};
+        //alert('device_id = ' + device_id + ' op=' + op);
+        $.ajax({
+            type: "PUT",
+            url : "http://okgosu.synology.me/aqua/light/?api_key=1234",
+            data : JSON.stringify(operation_data),
+            contentType : "application/json",
+            dataType : "JSON",
+            error : function(){
+                alert('API 휴식 중 4-switch control');
+            },
+            success : function(data){
+               console.log(data);
+            }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>okgosu's aqua world</h1>
+    <div id="dataArea"></div>
+    <img  class="c" src="http://okgosu.synology.me/aqua/cam/stream?api_key=1234" width="100%"></img>
+    <div data-role="fieldcontain">
+    	<label for="light-switch">LED</label>
+    	<select name="slider" id="light-switch" data-role="slider" onchange="switch_ctrl('light')">
+    		<option value="off">OFF</option>
+    		<option value="on">ON</option>
+    	</select>
+    </div>
+    <div data-role="fieldcontain">
+        <label for="cooler-switch">Cooler</label>
+        <select name="slider" id="cooler-switch" data-role="slider" onchange="switch_ctrl('cooler')">
+                <option value="off">OFF</option>
+                <option value="on">ON</option>
+        </select>
+    </div>
+    <div data-role="fieldcontain">
+      <label for="cam-switch">CAM</label>
+    	<select name="slider" id="cam-switch" data-role="slider" onchange="switch_cam()">
+    		<option value="off">OFF</option>
+    		<option value="on">ON</option>
+    	</select>
+    </div>
+  </body>
+</html>
+
+
